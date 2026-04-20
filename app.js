@@ -39,7 +39,7 @@ app.post("/signup", async (req, res) => {
   // validate the data
   try {
     signupValidationsData(req);
-    const { firstName, lastName, email, password, gender, photoURL, about } =
+    const { firstName, lastName, email, password, gender,age } =
       req.body;
     // encrypt the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,8 +51,7 @@ app.post("/signup", async (req, res) => {
       email: email,
       password: hashedPassword,
       gender: gender,
-      photoURL: photoURL,
-      about: about,
+      age: age,
     });
     // save the user to the database
     await user.save();

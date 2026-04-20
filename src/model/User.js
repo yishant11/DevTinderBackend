@@ -10,6 +10,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    age: {
+      type: Number,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,
@@ -21,23 +25,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-    },
-    age: {
-      type: Number,
-      min: 18,
-      max: 60,
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female", "other"],
-      validate: {
-        validator: function (value) {
-          if (!["male", "female", "other"].includes(value)) {
-            throw new Error("Invalid Gender");
-          }
-          return true;
-        },
-      },
     },
   },
   {

@@ -1,15 +1,11 @@
 const express = require("express");
 const authRouter = express.Router();
 
-
 // POST SIGNUP
 authRouter.post("/signup", async (req, res) => {
-  console.log("Request body:", req.body);
-  // validate the data
   try {
     signupValidationsData(req);
     const { firstName, lastName, email, password } = req.body;
-
 
     // encrypt the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,9 +20,9 @@ authRouter.post("/signup", async (req, res) => {
 
     // save the user to the database
     await user.save();
-    console.log("user saved sucessfully");
-    
+
     return res.status(201).send("User created successfully");
+    
   } catch (error) {
     return res.status(400).send(error.message);
   }
@@ -64,7 +60,7 @@ authRouter.post("/login", async (req, res) => {
     }
     if (isPasswordValid) {
       // create a token
-      const token = await user.getJWT()
+      const token = await user.getJWT();
       console.log("Token:", token);
 
       // add token to the cookie and send back to the response
@@ -82,14 +78,11 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-authRouter.post("/logout",(req,res)=>{
-    res.cookie("token",null,{
-        expires: new Date(Date.now())
-    })
-    res.send("Logout successful");
-})
-
-
-
+authRouter.post("/logout", (req, res) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+  });
+  res.send("Logout successful");
+});
 
 module.exports = authRouter;
