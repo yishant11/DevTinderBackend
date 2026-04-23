@@ -39,8 +39,7 @@ app.post("/signup", async (req, res) => {
   // validate the data
   try {
     signupValidationsData(req);
-    const { firstName, lastName, email, password, gender,age } =
-      req.body;
+    const { firstName, lastName, email, password, gender,age } = req.body;
     // encrypt the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -54,9 +53,30 @@ app.post("/signup", async (req, res) => {
       age: age,
     });
     // save the user to the database
-    await user.save();
-    console.log("user saved sucessfully");
-    return res.status(201).send("User created successfully");
+    const savedUser = await user.save();
+    const token = await jwt.sign(
+      {
+        userId: user._id,
+      },
+      "secret",
+      {
+        expiresIn: "1h",
+      },
+    );
+    console.log("Token:", token);
+
+    // add token to the cookie and send back to the response
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+    });
+
+    return res.json({
+      message: "User created successfully",
+      user: savedUser,
+    });
+
   } catch (error) {
     return res.status(400).send(error.message);
   }
