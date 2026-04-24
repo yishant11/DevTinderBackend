@@ -16,7 +16,7 @@ const userRouter = require("./routers/user");
 const cors = require("cors");
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://15.135.76.115",
     credentials: true,
   }),
 );
