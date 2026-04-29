@@ -12,6 +12,7 @@ const { auth } = require("./middleware/auth");
 const profileRouter = require("./routers/profileRouter");
 const connectionRequestRouter = require("./routers/connectionRequest");
 const userRouter = require("./routers/user");
+require("dotenv").config();
 
 const cors = require("cors");
 app.use(

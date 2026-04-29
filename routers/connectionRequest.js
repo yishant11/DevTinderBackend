@@ -3,6 +3,7 @@ const connectionRequestRouter = express.Router();
 const { auth } = require("../middleware/auth");
 const ConnectionRequest = require("../src/model/ConnectionRequest");
 const User = require("../src/model/User");
+const  sendEmail  = require("../utils/sendEmail");
 
 // POST connection request
 connectionRequestRouter.post(
@@ -52,6 +53,11 @@ connectionRequestRouter.post(
       });
       
       await connectionRequest.save();
+      
+      // Send email notification
+      const emailResult = await sendEmail.run(`GOT NEW FRIEND REQUEST FROM ${req.user.firstName.toUpperCase()} ${req.user.lastName.toUpperCase()}`, `Hello ${touser.firstName},\n\n${req.user.firstName} ${req.user.lastName} has sent you a friend request.\n\nPlease log in to your account to review the request.`);
+      console.log("Email sent successfully", emailResult);
+      
       res.status(201).json({
         message: "Connection request sent successfully",
         connectionRequest,
@@ -108,3 +114,4 @@ connectionRequestRouter.post(
 );
 
 module.exports = connectionRequestRouter;
+
