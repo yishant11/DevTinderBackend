@@ -1,5 +1,5 @@
-import { SendEmailCommand } from "@aws-sdk/client-ses";
-import sesClient from "./sesClient.js";
+const { SendEmailCommand } = require("@aws-sdk/client-ses");
+const sesClient = require("./sesClient.js");
 
 const createSendEmailCommand = (toAddress, fromAddress,subject,body) => {
   return new SendEmailCommand({
@@ -57,4 +57,4 @@ const run = async (subject,body) => {
   }
 };
 
-export { run };
+module.exports = { run };
