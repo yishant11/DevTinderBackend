@@ -1,6 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
 const express = require("express");
 const app = express();
-require("dotenv").config();
 // const { auth,user } = require('./middleware/auth');
 const connectDB = require("./config/db");
 const User = require("././src/model/User.js");
@@ -13,7 +14,6 @@ const { auth } = require("./middleware/auth");
 const profileRouter = require("./routers/profileRouter");
 const connectionRequestRouter = require("./routers/connectionRequest");
 const userRouter = require("./routers/user");
-require("dotenv").config();
 
 const cors = require("cors");
 app.use(
