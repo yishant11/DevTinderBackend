@@ -14,6 +14,8 @@ const profileRouter = require("./routers/profileRouter");
 const connectionRequestRouter = require("./routers/connectionRequest");
 const userRouter = require("./routers/user");
 
+require("./utils/cronJobs.js");
+
 const cors = require("cors");
 app.use(
   cors({
