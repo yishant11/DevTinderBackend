@@ -13,8 +13,12 @@ const { auth } = require("./middleware/auth");
 const profileRouter = require("./routers/profileRouter");
 const connectionRequestRouter = require("./routers/connectionRequest");
 const userRouter = require("./routers/user");
+const paymentRouter = require("./routers/payment");
 
 require("./utils/cronJobs.js");
+
+// ✅ MUST be present
+app.use(express.json());
 
 const cors = require("cors");
 app.use(
@@ -27,6 +31,9 @@ app.use(
 connectDB();
 app.use(express.json());
 app.use(cookieParser());
+
+// payment router
+app.use("/payment", paymentRouter);
 
 // Use profile router
 app.use("/profile", profileRouter);
