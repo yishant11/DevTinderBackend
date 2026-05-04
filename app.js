@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // payment router
-app.use("/payment", paymentRouter);
+app.use("/", paymentRouter);
 
 // Use profile router
 app.use("/profile", profileRouter);
