@@ -33,7 +33,7 @@ connectDB();
 app.use(cookieParser());
 
 // BEFORE routes
-app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
+app.use("/payment/webhook", express.raw({ type: "application/json" }));
 
 // AFTER that
 app.use(express.json());
@@ -48,7 +48,7 @@ app.use("/request", connectionRequestRouter);
 app.use("/user", userRouter);
 
 // Use payment router
-app.use("/api/payment", paymentRouter);
+app.use("/payment", paymentRouter);
 
 app.post("/signup", async (req, res) => {
   console.log("Request body:", req.body);
