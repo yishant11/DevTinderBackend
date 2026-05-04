@@ -29,11 +29,14 @@ app.use(
 );
 
 connectDB();
-app.use(express.json());
+// app.use(express.json());
 app.use(cookieParser());
 
-// payment router
-app.use("/api/payment", paymentRouter);
+// BEFORE routes
+app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
+
+// AFTER that
+app.use(express.json());
 
 // Use profile router
 app.use("/profile", profileRouter);

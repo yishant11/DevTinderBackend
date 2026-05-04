@@ -54,7 +54,7 @@ PaymentRouter.post("/create-order", auth, async (req, res) => {
 PaymentRouter.post("/webhook", async (req, res) => {
   try {
     console.log("Webhook received:", req.body);
-    
+
     const signature = req.headers["x-razorpay-signature"];
     console.log("Webhook signature:", signature);
 
@@ -70,13 +70,13 @@ PaymentRouter.post("/webhook", async (req, res) => {
     }
 
     const isWebhookValid = validateWebhookSignature(
-      JSON.stringify(req.body),
+      req.body, // raw buffer
       signature,
       webhookSecret,
     );
-    
+
     console.log("Webhook signature valid:", isWebhookValid);
-    
+
     if (!isWebhookValid) {
       return res.status(400).send("Invalid signature");
     }
@@ -92,7 +92,7 @@ PaymentRouter.post("/webhook", async (req, res) => {
       const payment = await Payment.findOne({
         orderId: paymentDetails.order_id,
       });
-      
+
       if (!payment) {
         console.log("Payment not found for order:", paymentDetails.order_id);
         return res.status(404).send("Payment not found");
