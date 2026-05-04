@@ -4,7 +4,6 @@ const app = express();
 // const { auth,user } = require('./middleware/auth');
 const connectDB = require("./config/db");
 const User = require("./src/model/User.js");
-app.use(express.json());
 const { signupValidationsData } = require("./utils/validate");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -17,8 +16,6 @@ const paymentRouter = require("./routers/payment");
 
 require("./utils/cronJobs.js");
 
-// ✅ MUST be present
-app.use(express.json());
 
 const cors = require("cors");
 app.use(
