@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 // const { auth,user } = require('./middleware/auth');
 const connectDB = require("./config/db");
-const User = require("././src/model/User.js");
+const User = require("./src/model/User.js");
 app.use(express.json());
 const { signupValidationsData } = require("./utils/validate");
 const bcrypt = require("bcrypt");
