@@ -53,7 +53,9 @@ PaymentRouter.post("/create-order", auth, async (req, res) => {
 
 PaymentRouter.post("/webhook", async (req, res) => {
   try {
-    console.log("Webhook received:", req.body);
+    // req.body is a raw Buffer from express.raw()
+    const rawBody = req.body.toString("utf8");
+    console.log("Webhook received (raw):", rawBody);
 
     const signature = req.headers["x-razorpay-signature"];
     console.log("Webhook signature:", signature);
@@ -70,7 +72,7 @@ PaymentRouter.post("/webhook", async (req, res) => {
     }
 
     const isWebhookValid = validateWebhookSignature(
-      req.body, // raw buffer
+      rawBody, // raw string, NOT parsed object
       signature,
       webhookSecret,
     );
@@ -81,12 +83,15 @@ PaymentRouter.post("/webhook", async (req, res) => {
       return res.status(400).send("Invalid signature");
     }
 
+    // Parse the raw body to access event data
+    const body = JSON.parse(rawBody);
+
     // Handle different webhook events
-    const event = req.body.event;
+    const event = body.event;
     console.log("Webhook event:", event);
 
     if (event === "payment.captured") {
-      const paymentDetails = req.body.payload.payment.entity;
+      const paymentDetails = body.payload.payment.entity;
       console.log("Payment details:", paymentDetails);
 
       const payment = await Payment.findOne({
