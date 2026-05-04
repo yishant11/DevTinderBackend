@@ -47,6 +47,9 @@ app.use("/request", connectionRequestRouter);
 // Use user router
 app.use("/user", userRouter);
 
+// Use payment router
+app.use("/api/payment", paymentRouter);
+
 app.post("/signup", async (req, res) => {
   console.log("Request body:", req.body);
   // validate the data
