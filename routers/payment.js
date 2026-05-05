@@ -55,12 +55,12 @@ PaymentRouter.post("/webhook", async (req, res) => {
   try {
 
     const signature = req.headers["x-razorpay-signature"];
-    console.log("Signature:", signature);
-    console.log("Request body:", req.body);
-    console.log("Webhook secret:", process.env.RAZORPAY_WEBHOOK_SECRET);
+
+    // req.body is a Buffer from express.raw() — convert to string (NOT JSON.stringify!)
+    const rawBody = req.body.toString();
 
     const isWebhookValid = validateWebhookSignature(
-      JSON.stringify(req.body),
+      rawBody,
       signature,
       process.env.RAZORPAY_WEBHOOK_SECRET
     );
@@ -71,18 +71,20 @@ PaymentRouter.post("/webhook", async (req, res) => {
       return res.status(400).send("webhook Invalid signature");
     }
 
-    // upade payment status in db
+    // Parse the raw string to get usable JSON
+    const body = JSON.parse(rawBody);
 
-    const paymentDetails = req.body.payload.payment.entity;
+    // update payment status in db
+    const paymentDetails = body.payload.payment.entity;
 
     const payment = await Payment.findOne({orderId:paymentDetails.order_id});
+    payment.status = "completed";
     await payment.save();
 
     // update user as premium
-
     const user = await User.findOne({_id:payment.userId});
-    user.isPremium=true;
-    user.membership_type=payment.notes.membership_type;
+    user.isPremium = true;
+    user.membershipType = payment.notes.membership_type;
     await user.save();
 
     // if (req.body.event === "payment.captured") {
